@@ -27,10 +27,10 @@ module code.
 
 1. Prepare inputs:
 
-```bash
-cp terraform.tfvars.example terraform.tfvars
-cp managed-credentials.yaml.example managed-credentials.yaml
-```
+   ```bash
+   cp terraform.tfvars.example terraform.tfvars
+   cp managed-credentials.yaml.example managed-credentials.yaml
+   ```
 
 2. Set real values for `vault_addr` and `vault_token` in
    `terraform.tfvars`.
@@ -40,20 +40,20 @@ cp managed-credentials.yaml.example managed-credentials.yaml
 
 4. Authenticate Terraform CLI (`TFE_TOKEN` or `terraform login`) and run:
 
-```bash
-just format
-just lint
-just plan
-just apply
-```
+   ```bash
+   just format
+   just lint
+   just plan
+   just apply
+   ```
 
 5. Capture outputs:
 
-```bash
-terraform output -json
-```
+   ```bash
+   terraform output -json
+   ```
 
-Store sensitive outputs (tokens, role IDs, secret IDs) in your secret manager.
+   Store sensitive outputs (tokens, role IDs, secret IDs) in your secret manager.
 
 For Kubernetes External Secrets Operator integration, persist the following
 outputs:
