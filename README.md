@@ -1,17 +1,17 @@
 # terraform-vault-bootstrap
 
-Bootstrap repository for Vault-side MCP credentials and policy scaffolding.
+Bootstrap repository for Vault-side credentials and policy scaffolding.
 
 This repository configures HashiCorp Vault (including HCP Vault) for generic
-MCP workflows by:
+secret management workflows by:
 
-- creating (or reusing) a KV v2 mount for MCP-managed secrets
+- creating (or reusing) a KV v2 mount for managed secrets
 - creating a least-privilege Vault policy across one or more managed secret
   prefixes
 - minting a renewable token scoped to that policy
 
-Remote state is stored in HCP Terraform workspace `terraform-vault-bootstrap`
-under organization `karl-vanderslice-org`.
+Remote state can be stored in an HCP Terraform workspace. Configure the `cloud`
+backend block in `terraform.tf` with your organization and workspace name.
 
 The module is intentionally generic. You can tune policy name, token display
 name, mount description, capabilities, and managed prefixes without changing
@@ -20,8 +20,8 @@ module code.
 ## Prerequisites
 
 - `just` and `nix` installed
-- reachable Vault cluster
-- bootstrap Vault admin token
+- Reachable Vault cluster
+- Bootstrap Vault admin token
 
 ## Quickstart
 
@@ -32,13 +32,13 @@ cp terraform.tfvars.example terraform.tfvars
 cp managed-credentials.yaml.example managed-credentials.yaml
 ```
 
-1. Set real values for `vault_addr` and `vault_token` in
+2. Set real values for `vault_addr` and `vault_token` in
    `terraform.tfvars`.
 
-1. Update `managed-credentials.yaml` with the credential inventory you intend
+3. Update `managed-credentials.yaml` with the credential inventory you intend
    to manage. This file is gitignored by design.
 
-1. Authenticate Terraform CLI (`TFE_TOKEN` or `terraform login`) and run:
+4. Authenticate Terraform CLI (`TFE_TOKEN` or `terraform login`) and run:
 
 ```bash
 just format
@@ -47,14 +47,26 @@ just plan
 just apply
 ```
 
-1. Capture outputs:
+5. Capture outputs:
 
 ```bash
 terraform output -json
 ```
 
-Store `mcp_token` in Bitwarden shared org collection (`ai-sandbox` /
-`AI_Shared`) and hydrate into agent-hub as `VAULT_TOKEN`.
+Store sensitive outputs (tokens, role IDs, secret IDs) in your secret manager.
+
+For Kubernetes External Secrets Operator integration, persist the following
+outputs:
+
+- `vault_addr` -> `VAULT_ADDR`
+- `vault_namespace` -> `VAULT_NAMESPACE`
+- `temporary_bootstrap_token`
+- `vault_sync_role_id` -> `VAULT_SYNC_ROLE_ID`
+- `vault_sync_secret_id` -> `VAULT_SYNC_SECRET_ID`
+- `vault_auth_mount_name` -> `VAULT_AUTH_MOUNT`
+- `vault_kv_mount_name` -> `VAULT_KV_MOUNT`
+- `vault_eso_role_name` -> `VAULT_ESO_ROLE`
+- `vault_ca_bundle_or_note`
 
 ## Non-committed credential inventory
 
@@ -69,24 +81,13 @@ This gives you both:
 - explicit inventory of managed credentials
 - no secret inventory drift committed to git
 
-## Integration with agent-hub Vault MCP
+## Downstream Integration
 
-agent-hub expects:
-
-- `VAULT_ADDR`
-- `VAULT_TOKEN`
-- `VAULT_NAMESPACE`
-
-If you use the default item name in agent-hub (`HCP Vault Ezra`), set fields:
+Downstream consumers that use this Vault configuration need:
 
 - `VAULT_ADDR`
 - `VAULT_TOKEN`
 - `VAULT_NAMESPACE`
 
-Then run from agent-hub:
-
-```bash
-just bw-vault-credentials-pull
-just mcp-enable vault
-just mcp-up
-```
+Set these environment variables or store them in your secret manager, then
+configure your tooling to read them at runtime.
