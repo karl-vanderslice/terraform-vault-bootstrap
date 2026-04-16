@@ -39,3 +39,41 @@ output "managed_credentials_inventory" {
   description = "Local credential inventory loaded from managed-credentials.yaml when present."
   value       = local.managed_credentials_inventory
 }
+
+output "vault_auth_mount_name" {
+  description = "Vault auth mount used for AppRole-based ESO authentication."
+  value       = local.vault_auth_mount_path
+}
+
+output "vault_kv_mount_name" {
+  description = "Vault KV mount used by ESO sync policy."
+  value       = local.kv_mount_path
+}
+
+output "vault_eso_role_name" {
+  description = "Vault AppRole name for External Secrets Operator."
+  value       = vault_approle_auth_backend_role.vault_sync.role_name
+}
+
+output "vault_sync_role_id" {
+  description = "Vault AppRole role_id for External Secrets Operator."
+  value       = vault_approle_auth_backend_role.vault_sync.role_id
+  sensitive   = true
+}
+
+output "vault_sync_secret_id" {
+  description = "Fresh Vault AppRole secret_id for External Secrets Operator."
+  value       = vault_approle_auth_backend_role_secret_id.vault_sync.secret_id
+  sensitive   = true
+}
+
+output "temporary_bootstrap_token" {
+  description = "Short-lived token for bootstrap/testing during ESO onboarding."
+  value       = vault_token.vault_sync_bootstrap.client_token
+  sensitive   = true
+}
+
+output "vault_ca_bundle_or_note" {
+  description = "CA bundle guidance for ESO Vault connectivity."
+  value       = "Public CA is sufficient for the HCP Vault public endpoint; no custom CA bundle required."
+}

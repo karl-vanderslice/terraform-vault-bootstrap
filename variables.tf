@@ -80,3 +80,69 @@ variable "managed_credentials_manifest_file" {
   type        = string
   default     = "managed-credentials.yaml"
 }
+
+variable "create_vault_auth_mount" {
+  description = "Whether to create the auth mount used for ESO AppRole auth."
+  type        = bool
+  default     = true
+}
+
+variable "vault_auth_mount_path" {
+  description = "Auth mount path used for ESO AppRole auth."
+  type        = string
+  default     = "approle"
+}
+
+variable "vault_auth_mount_description" {
+  description = "Description for the ESO AppRole auth mount."
+  type        = string
+  default     = "AppRole auth mount for Kubernetes external-secrets sync"
+}
+
+variable "vault_eso_policy_name" {
+  description = "Vault policy name used by ESO AppRole and bootstrap token."
+  type        = string
+  default     = "vault-sync-read"
+}
+
+variable "vault_eso_role_name" {
+  description = "Vault AppRole name used by Kubernetes External Secrets Operator."
+  type        = string
+  default     = "external-secrets-operator"
+}
+
+variable "vault_sync_token_ttl" {
+  description = "Default token TTL in seconds for Vault AppRole logins used by ESO."
+  type        = number
+  default     = 3600
+}
+
+variable "vault_sync_token_max_ttl" {
+  description = "Maximum token TTL in seconds for Vault AppRole logins used by ESO."
+  type        = number
+  default     = 86400
+}
+
+variable "vault_sync_secret_id_ttl" {
+  description = "TTL in seconds for generated AppRole secret IDs used by ESO."
+  type        = number
+  default     = 86400
+}
+
+variable "vault_sync_bootstrap_token_display_name" {
+  description = "Display name for short-lived bootstrap token used during ESO setup."
+  type        = string
+  default     = "vault-sync-bootstrap"
+}
+
+variable "vault_sync_bootstrap_token_ttl" {
+  description = "TTL for short-lived bootstrap token used during ESO setup."
+  type        = string
+  default     = "30m"
+}
+
+variable "vault_sync_bootstrap_token_max_ttl" {
+  description = "Maximum TTL for short-lived bootstrap token used during ESO setup."
+  type        = string
+  default     = "2h"
+}

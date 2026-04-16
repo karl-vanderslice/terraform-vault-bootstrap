@@ -1,6 +1,7 @@
 locals {
   kv_mount_path                 = trim(var.mcp_kv_mount_path, "/")
   managed_prefixes              = distinct([for p in var.managed_secret_prefixes : trim(p, "/") if trim(p, "/") != ""])
+  vault_auth_mount_path         = trim(var.vault_auth_mount_path, "/")
   mcp_mounts_path               = "sys/mounts"
   mcp_health_path               = "sys/health"
   managed_credentials_manifest  = "${path.module}/${var.managed_credentials_manifest_file}"
@@ -54,5 +55,54 @@ resource "vault_token" "mcp" {
   renewable        = true
   ttl              = var.mcp_token_ttl
   explicit_max_ttl = var.mcp_token_explicit_max_ttl
+  no_parent        = false
+}
+
+resource "vault_auth_backend" "approle" {
+  count       = var.create_vault_auth_mount ? 1 : 0
+  type        = "approle"
+  path        = local.vault_auth_mount_path
+  description = var.vault_auth_mount_description
+}
+
+resource "vault_policy" "vault_sync" {
+  name = var.vault_eso_policy_name
+
+  policy = join(
+    "\n\n",
+    [
+      for prefix in local.managed_prefixes : <<-EOT
+        path "${local.kv_mount_path}/data/${prefix}/*" {
+          capabilities = ["read", "list"]
+        }
+
+        path "${local.kv_mount_path}/metadata/${prefix}/*" {
+          capabilities = ["read", "list"]
+        }
+      EOT
+    ]
+  )
+}
+
+resource "vault_approle_auth_backend_role" "vault_sync" {
+  backend        = local.vault_auth_mount_path
+  role_name      = var.vault_eso_role_name
+  token_policies = [vault_policy.vault_sync.name]
+  token_ttl      = var.vault_sync_token_ttl
+  token_max_ttl  = var.vault_sync_token_max_ttl
+}
+
+resource "vault_approle_auth_backend_role_secret_id" "vault_sync" {
+  backend     = local.vault_auth_mount_path
+  role_name   = vault_approle_auth_backend_role.vault_sync.role_name
+  ttl         = var.vault_sync_secret_id_ttl
+}
+
+resource "vault_token" "vault_sync_bootstrap" {
+  display_name     = var.vault_sync_bootstrap_token_display_name
+  policies         = [vault_policy.vault_sync.name]
+  renewable        = true
+  ttl              = var.vault_sync_bootstrap_token_ttl
+  explicit_max_ttl = var.vault_sync_bootstrap_token_max_ttl
   no_parent        = false
 }
