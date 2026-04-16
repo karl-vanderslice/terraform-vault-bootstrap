@@ -1,0 +1,19 @@
+vault_addr      = "https://example-vault-cluster-public.vault.hashicorp.cloud:8200"
+vault_token     = "REDACTED"
+vault_namespace = "admin"
+
+mcp_kv_mount_path          = "mcp-kv"
+mcp_kv_mount_description   = "KV v2 mount for MCP workflows"
+create_kv_mount            = true
+mcp_policy_name            = "mcp-bootstrap"
+mcp_token_display_name     = "mcp-bootstrap"
+mcp_token_ttl              = "24h"
+mcp_token_explicit_max_ttl = "168h"
+managed_secret_prefixes    = ["ezra"]
+
+mcp_data_capabilities = ["create", "read", "update", "delete", "list"]
+mcp_metadata_capabilities = ["read", "list", "delete"]
+
+# Local untracked inventory file name. The file itself should be copied from
+# managed-credentials.yaml.example and kept out of git.
+managed_credentials_manifest_file = "managed-credentials.yaml"

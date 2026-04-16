@@ -1,0 +1,11 @@
+.terraform/
+*.tfplan
+terraform.tfstate
+terraform.tfstate.*
+*.auto.tfvars
+terraform.tfvars
+managed-credentials.yaml
+result
+.pre-commit-config.yaml
+.direnv/
+!.envrc

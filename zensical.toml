@@ -1,0 +1,4 @@
+site_name = "terraform-vault-bootstrap"
+base_url = "/terraform-vault-bootstrap/"
+source = "docs"
+build = "build"
