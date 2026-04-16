@@ -13,7 +13,7 @@ terraform {
   required_providers {
     vault = {
       source  = "hashicorp/vault"
-      version = "~> 4.5"
+      version = "~> 5.8"
     }
   }
 }
