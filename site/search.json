@@ -1,0 +1,1 @@
+{"config":{"separator":"[\\s\\-_,:!=\\[\\]()\\\\\"`/]+|\\.(?!\\d)"},"items":[{"location":"","level":1,"title":"terraform-vault-bootstrap","text":"<p>Bootstrap Vault policies and token credentials for secret management workflows.</p> <p>See README for operational steps.</p>","path":["terraform-vault-bootstrap"],"tags":[]}]}
