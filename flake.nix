@@ -72,6 +72,7 @@
             markdownlint-cli2
             pre-commit
             statix
+            terraform-docs
             terraformCompat
             zensical
           ];

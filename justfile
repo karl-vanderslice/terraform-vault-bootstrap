@@ -62,3 +62,9 @@ pre-commit:
 
 _pre-commit:
   pre-commit run --all-files --show-diff-on-failure
+
+terraform-docs:
+  @just enter-nix _terraform-docs
+
+_terraform-docs:
+  terraform-docs markdown table --output-file README.md --output-mode inject .
