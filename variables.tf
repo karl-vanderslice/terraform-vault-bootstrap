@@ -3,6 +3,23 @@ variable "vault_addr" {
   type        = string
 }
 
+variable "vault_iam_access_key_id" {
+  description = "AWS access key ID for the Vault IAM user (from terraform-aws-bootstrap)."
+  type        = string
+}
+
+variable "vault_iam_secret_access_key" {
+  description = "AWS secret access key for the Vault IAM user (from terraform-aws-bootstrap)."
+  type        = string
+  sensitive   = true
+}
+
+variable "aws_region" {
+  description = "AWS region for the Vault AWS secrets engine."
+  type        = string
+  default     = "us-east-1"
+}
+
 variable "vault_token" {
   description = "Bootstrap admin token used to configure Vault."
   type        = string

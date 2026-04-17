@@ -1,5 +1,9 @@
 vault_addr      = "https://example-vault-cluster-public.vault.hashicorp.cloud:8200"
 vault_token     = "REDACTED"
+
+vault_iam_access_key_id     = "REDACTED"
+vault_iam_secret_access_key = "REDACTED"
+aws_region                  = "us-east-1"
 vault_namespace = "admin"
 
 mcp_kv_mount_path          = "mcp-kv"
