@@ -93,9 +93,9 @@ resource "vault_approle_auth_backend_role" "vault_sync" {
 }
 
 resource "vault_approle_auth_backend_role_secret_id" "vault_sync" {
-  backend     = local.vault_auth_mount_path
-  role_name   = vault_approle_auth_backend_role.vault_sync.role_name
-  ttl         = var.vault_sync_secret_id_ttl
+  backend   = local.vault_auth_mount_path
+  role_name = vault_approle_auth_backend_role.vault_sync.role_name
+  ttl       = var.vault_sync_secret_id_ttl
 }
 
 resource "vault_token" "vault_sync_bootstrap" {

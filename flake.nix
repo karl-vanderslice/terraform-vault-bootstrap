@@ -26,10 +26,14 @@
 
       perSystem = {
         config,
-        pkgs,
         system,
         ...
       }: let
+        pkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+
         terraformCompat = pkgs.writeShellScriptBin "terraform" ''
           exec ${pkgs.opentofu}/bin/tofu "$@"
         '';
@@ -72,6 +76,7 @@
             markdownlint-cli2
             pre-commit
             statix
+            vault
             terraform-docs
             terraformCompat
             zensical
