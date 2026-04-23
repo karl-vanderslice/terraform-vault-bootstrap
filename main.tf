@@ -106,3 +106,32 @@ resource "vault_token" "vault_sync_bootstrap" {
   explicit_max_ttl = var.vault_sync_bootstrap_token_max_ttl
   no_parent        = false
 }
+
+resource "vault_approle_auth_backend_role" "admin_automation" {
+  count = var.create_admin_automation_role ? 1 : 0
+
+  backend        = local.vault_auth_mount_path
+  role_name      = var.admin_automation_role_name
+  token_policies = ["admin"]
+  token_ttl      = var.admin_automation_role_token_ttl
+  token_max_ttl  = var.admin_automation_role_token_max_ttl
+}
+
+resource "vault_approle_auth_backend_role_secret_id" "admin_automation" {
+  count = var.create_admin_automation_role ? 1 : 0
+
+  backend   = local.vault_auth_mount_path
+  role_name = vault_approle_auth_backend_role.admin_automation[0].role_name
+  ttl       = var.admin_automation_secret_id_ttl
+}
+
+resource "vault_token" "admin_automation" {
+  count = var.create_admin_automation_token ? 1 : 0
+
+  display_name     = var.admin_automation_token_display_name
+  policies         = ["admin"]
+  renewable        = true
+  ttl              = var.admin_automation_token_ttl
+  explicit_max_ttl = var.admin_automation_token_max_ttl
+  no_parent        = false
+}

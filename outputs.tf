@@ -77,3 +77,26 @@ output "vault_ca_bundle_or_note" {
   description = "CA bundle guidance for ESO Vault connectivity."
   value       = "Public CA is sufficient for the HCP Vault public endpoint; no custom CA bundle required."
 }
+
+output "admin_automation_role_name" {
+  description = "Vault AppRole name for admin automation access."
+  value       = var.create_admin_automation_role ? vault_approle_auth_backend_role.admin_automation[0].role_name : null
+}
+
+output "admin_automation_role_id" {
+  description = "Vault AppRole role_id for admin automation access."
+  value       = var.create_admin_automation_role ? vault_approle_auth_backend_role.admin_automation[0].role_id : null
+  sensitive   = true
+}
+
+output "admin_automation_secret_id" {
+  description = "Fresh Vault AppRole secret_id for admin automation access."
+  value       = var.create_admin_automation_role ? vault_approle_auth_backend_role_secret_id.admin_automation[0].secret_id : null
+  sensitive   = true
+}
+
+output "admin_automation_token" {
+  description = "Renewable admin-scoped automation token. Store in Bitwarden immediately."
+  value       = var.create_admin_automation_token ? vault_token.admin_automation[0].client_token : null
+  sensitive   = true
+}

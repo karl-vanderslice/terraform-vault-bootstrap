@@ -92,6 +92,34 @@ Downstream consumers that use this Vault configuration need:
 Set these environment variables or store them in your secret manager, then
 configure your tooling to read them at runtime.
 
+## OCI GitHub Runner Broker
+
+For [terraform-oci-github-runner](/home/karl/Projects/src/github.com/karl-vanderslice/terraform-oci-github-runner/README.md), use this repo's KV mount as the broker for both GitHub and OCI credential material.
+
+Recommended settings:
+
+- include `github` and `oci` in `managed_secret_prefixes`
+- keep the mount path at `mcp-kv` unless you already standardized on another KV v2 mount
+
+Recommended secret layout:
+
+- `mcp-kv/data/github/runner-bootstrap`
+  - field `GITHUB_TOKEN`
+- `mcp-kv/data/oci/terraform-runner`
+  - field `OCI_USER_OCID`
+  - field `OCI_TENANCY_OCID`
+  - field `OCI_FINGERPRINT`
+  - field `OCI_REGION`
+  - field `OCI_PRIVATE_KEY`
+  - field `OCI_PUBLIC_KEY`
+
+How these are used:
+
+- the OCI runner VM reads `github/runner-bootstrap` at boot in `vault-oci-auth` mode so the long-lived GitHub bootstrap credential never lands in Terraform state
+- operator and HCP Terraform workflows can hydrate OCI provider credentials from `oci/terraform-runner` without committing local secret material into the repo
+
+This bootstrap repo does not write those secrets into Vault for you. Keep them external to Terraform state and place them in Vault through your secret-management workflow after the mount and policies exist.
+
 ## Terraform Reference
 
 <!-- BEGIN_TF_DOCS -->

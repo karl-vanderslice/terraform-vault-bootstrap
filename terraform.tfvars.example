@@ -13,7 +13,7 @@ mcp_policy_name            = "mcp-bootstrap"
 mcp_token_display_name     = "mcp-bootstrap"
 mcp_token_ttl              = "24h"
 mcp_token_explicit_max_ttl = "168h"
-managed_secret_prefixes    = ["ezra"]
+managed_secret_prefixes    = ["ezra", "github", "oci"]
 
 mcp_data_capabilities = ["create", "read", "update", "delete", "list"]
 mcp_metadata_capabilities = ["read", "list", "delete"]

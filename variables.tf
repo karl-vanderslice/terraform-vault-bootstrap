@@ -163,3 +163,57 @@ variable "vault_sync_bootstrap_token_max_ttl" {
   type        = string
   default     = "2h"
 }
+
+variable "create_admin_automation_role" {
+  description = "Whether to create an AppRole that can mint admin-scoped Vault tokens for automation flows."
+  type        = bool
+  default     = true
+}
+
+variable "admin_automation_role_name" {
+  description = "Vault AppRole name for admin-capable automation access."
+  type        = string
+  default     = "ezra-admin-automation"
+}
+
+variable "admin_automation_role_token_ttl" {
+  description = "Default token TTL in seconds for admin automation AppRole logins."
+  type        = number
+  default     = 3600
+}
+
+variable "admin_automation_role_token_max_ttl" {
+  description = "Maximum token TTL in seconds for admin automation AppRole logins."
+  type        = number
+  default     = 86400
+}
+
+variable "admin_automation_secret_id_ttl" {
+  description = "TTL in seconds for generated admin automation AppRole secret IDs."
+  type        = number
+  default     = 86400
+}
+
+variable "create_admin_automation_token" {
+  description = "Whether to mint a renewable admin-scoped bootstrap token for operator automation."
+  type        = bool
+  default     = true
+}
+
+variable "admin_automation_token_display_name" {
+  description = "Display name for the admin automation bootstrap token."
+  type        = string
+  default     = "ezra-admin-automation"
+}
+
+variable "admin_automation_token_ttl" {
+  description = "TTL for the admin automation bootstrap token."
+  type        = string
+  default     = "24h"
+}
+
+variable "admin_automation_token_max_ttl" {
+  description = "Maximum TTL for the admin automation bootstrap token."
+  type        = string
+  default     = "168h"
+}
